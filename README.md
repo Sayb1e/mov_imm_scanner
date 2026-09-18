@@ -1,7 +1,7 @@
 # MOV 立即数扫描器
 
 一个 IDA Pro 插件（IDAPython）：扫描用户选中的地址范围，把所有向寄存器写入立即数的
-`mov` 类指令打印到 Output 窗口。
+`mov` 类指令打印到 Output 窗口，并可将立即数导出为 Python 数组或 C 数组。
 
 ## 功能
 
@@ -9,8 +9,10 @@
 - 未选中任何范围时，弹出起止地址输入框
 - 匹配 `mov`、`movzx`、`movsx`、`movsxd`
 - 打印地址、操作数序号、立即数以及反汇编文本
+- 将立即数导出为 Python 数组（`immediates = [...]`）
+- 将立即数导出为 C 数组（`uint64_t immediates[] = {...};`）
 - 结果输出到 IDA 的 Output 窗口
-- 快捷键：`Ctrl-Alt-I`
+- 快捷键：`Ctrl-Alt-I`（详细列表）
 
 ## 环境要求
 
@@ -32,12 +34,17 @@
 
 1. 打开数据库，切换到反汇编视图。
 2. 选中一段地址范围。
-3. 执行 `Edit > Plugins > MOV Immediate Scanner`，或按 `Ctrl-Alt-I`。
-4. 结果会打印在 Output 窗口。
+3. 从 `Edit > Plugins` 选择其中一个入口，结果会打印在 Output 窗口：
+   - `MOV Immediate Scanner`：输出详细信息（地址、操作数、立即数、反汇编）。
+     也可直接按 `Ctrl-Alt-I`。
+   - `MOV Immediate Scanner: Python Array`：输出 Python 数组。
+   - `MOV Immediate Scanner: C Array`：输出 C 数组（`uint64_t`）。
 
 如果未选中任何范围，插件会提示输入起始和结束地址。
 
 ## 输出示例
+
+详细列表：
 
 ```
 [MOV Imm Scanner] range 0x140001000 - 0x140003000
@@ -46,6 +53,28 @@
 0x140027CEF  op1 = 0x5A4D   ; mov eax, 5A4Dh
 
 [MOV Imm Scanner] 3 immediate mov(s) found in 697 instructions.
+```
+
+Python 数组：
+
+```python
+[MOV Imm Scanner] range 0x140001000 - 0x140003000, 3 immediate(s)
+immediates = [
+    0x4000,
+    0x7,
+    0x5A4D,
+]
+```
+
+C 数组：
+
+```c
+[MOV Imm Scanner] range 0x140001000 - 0x140003000, 3 immediate(s)
+uint64_t immediates[] = {
+    0x4000ULL,
+    0x7ULL,
+    0x5A4DULL,
+};
 ```
 
 ## 说明
