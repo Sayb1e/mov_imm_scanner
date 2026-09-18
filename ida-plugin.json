@@ -1,0 +1,7 @@
+{
+  "IDAMetadataDescriptorVersion": 1,
+  "plugin": {
+    "name": "MOV Immediate Scanner",
+    "entryPoint": "mov_imm_scanner.py"
+  }
+}
